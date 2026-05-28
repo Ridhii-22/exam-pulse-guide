@@ -14,7 +14,209 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      bookmarks: {
+        Row: {
+          created_at: string
+          id: string
+          item_id: string
+          item_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          item_id: string
+          item_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          item_id?: string
+          item_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      daily_activity: {
+        Row: {
+          activity_date: string
+          id: string
+          lectures_watched: number
+          questions_solved: number
+          study_seconds: number
+          tests_taken: number
+          user_id: string
+        }
+        Insert: {
+          activity_date?: string
+          id?: string
+          lectures_watched?: number
+          questions_solved?: number
+          study_seconds?: number
+          tests_taken?: number
+          user_id: string
+        }
+        Update: {
+          activity_date?: string
+          id?: string
+          lectures_watched?: number
+          questions_solved?: number
+          study_seconds?: number
+          tests_taken?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      lecture_progress: {
+        Row: {
+          chapter: string | null
+          completed: boolean
+          id: string
+          last_position_seconds: number
+          lecture_id: string
+          progress_percent: number
+          subject: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          chapter?: string | null
+          completed?: boolean
+          id?: string
+          last_position_seconds?: number
+          lecture_id: string
+          progress_percent?: number
+          subject?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          chapter?: string | null
+          completed?: boolean
+          id?: string
+          last_position_seconds?: number
+          lecture_id?: string
+          progress_percent?: number
+          subject?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          full_name: string | null
+          id: string
+          level: number
+          target_year: number | null
+          updated_at: string
+          xp: number
+        }
+        Insert: {
+          created_at?: string
+          full_name?: string | null
+          id: string
+          level?: number
+          target_year?: number | null
+          updated_at?: string
+          xp?: number
+        }
+        Update: {
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          level?: number
+          target_year?: number | null
+          updated_at?: string
+          xp?: number
+        }
+        Relationships: []
+      }
+      question_attempts: {
+        Row: {
+          chapter: string
+          created_at: string
+          id: string
+          is_correct: boolean
+          skipped: boolean
+          subject: string
+          test_attempt_id: string | null
+          user_id: string
+        }
+        Insert: {
+          chapter: string
+          created_at?: string
+          id?: string
+          is_correct: boolean
+          skipped?: boolean
+          subject: string
+          test_attempt_id?: string | null
+          user_id: string
+        }
+        Update: {
+          chapter?: string
+          created_at?: string
+          id?: string
+          is_correct?: boolean
+          skipped?: boolean
+          subject?: string
+          test_attempt_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "question_attempts_test_attempt_id_fkey"
+            columns: ["test_attempt_id"]
+            isOneToOne: false
+            referencedRelation: "test_attempts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      test_attempts: {
+        Row: {
+          accuracy: number
+          created_at: string
+          id: string
+          kind: string
+          score: number
+          subject: string | null
+          test_id: string | null
+          time_taken_seconds: number
+          title: string
+          total: number
+          user_id: string
+        }
+        Insert: {
+          accuracy?: number
+          created_at?: string
+          id?: string
+          kind?: string
+          score?: number
+          subject?: string | null
+          test_id?: string | null
+          time_taken_seconds?: number
+          title: string
+          total?: number
+          user_id: string
+        }
+        Update: {
+          accuracy?: number
+          created_at?: string
+          id?: string
+          kind?: string
+          score?: number
+          subject?: string | null
+          test_id?: string | null
+          time_taken_seconds?: number
+          title?: string
+          total?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
