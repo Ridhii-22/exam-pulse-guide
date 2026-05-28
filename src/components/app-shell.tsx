@@ -127,6 +127,7 @@ export function AppShell({ children }: { children?: ReactNode }) {
 
       <ChatbotFab />
     </div>
+    </AuthGuard>
   );
 }
 
