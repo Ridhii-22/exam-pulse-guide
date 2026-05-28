@@ -9,38 +9,128 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TestsRouteImport } from './routes/tests'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as PapersRouteImport } from './routes/papers'
+import { Route as LecturesRouteImport } from './routes/lectures'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as TestsMockRouteImport } from './routes/tests.mock'
 
+const TestsRoute = TestsRouteImport.update({
+  id: '/tests',
+  path: '/tests',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PapersRoute = PapersRouteImport.update({
+  id: '/papers',
+  path: '/papers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LecturesRoute = LecturesRouteImport.update({
+  id: '/lectures',
+  path: '/lectures',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TestsMockRoute = TestsMockRouteImport.update({
+  id: '/mock',
+  path: '/mock',
+  getParentRoute: () => TestsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/lectures': typeof LecturesRoute
+  '/papers': typeof PapersRoute
+  '/profile': typeof ProfileRoute
+  '/tests': typeof TestsRouteWithChildren
+  '/tests/mock': typeof TestsMockRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/lectures': typeof LecturesRoute
+  '/papers': typeof PapersRoute
+  '/profile': typeof ProfileRoute
+  '/tests': typeof TestsRouteWithChildren
+  '/tests/mock': typeof TestsMockRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/lectures': typeof LecturesRoute
+  '/papers': typeof PapersRoute
+  '/profile': typeof ProfileRoute
+  '/tests': typeof TestsRouteWithChildren
+  '/tests/mock': typeof TestsMockRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/lectures'
+    | '/papers'
+    | '/profile'
+    | '/tests'
+    | '/tests/mock'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/lectures' | '/papers' | '/profile' | '/tests' | '/tests/mock'
+  id:
+    | '__root__'
+    | '/'
+    | '/lectures'
+    | '/papers'
+    | '/profile'
+    | '/tests'
+    | '/tests/mock'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LecturesRoute: typeof LecturesRoute
+  PapersRoute: typeof PapersRoute
+  ProfileRoute: typeof ProfileRoute
+  TestsRoute: typeof TestsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tests': {
+      id: '/tests'
+      path: '/tests'
+      fullPath: '/tests'
+      preLoaderRoute: typeof TestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/papers': {
+      id: '/papers'
+      path: '/papers'
+      fullPath: '/papers'
+      preLoaderRoute: typeof PapersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lectures': {
+      id: '/lectures'
+      path: '/lectures'
+      fullPath: '/lectures'
+      preLoaderRoute: typeof LecturesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +138,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tests/mock': {
+      id: '/tests/mock'
+      path: '/mock'
+      fullPath: '/tests/mock'
+      preLoaderRoute: typeof TestsMockRouteImport
+      parentRoute: typeof TestsRoute
+    }
   }
 }
 
+interface TestsRouteChildren {
+  TestsMockRoute: typeof TestsMockRoute
+}
+
+const TestsRouteChildren: TestsRouteChildren = {
+  TestsMockRoute: TestsMockRoute,
+}
+
+const TestsRouteWithChildren = TestsRoute._addFileChildren(TestsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LecturesRoute: LecturesRoute,
+  PapersRoute: PapersRoute,
+  ProfileRoute: ProfileRoute,
+  TestsRoute: TestsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
