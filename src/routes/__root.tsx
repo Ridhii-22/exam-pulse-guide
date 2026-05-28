@@ -64,6 +64,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:title", content: "NeetForge — Premium NEET Preparation" },
       { property: "og:description", content: "Modern NEET prep: tests, PYQs, lectures, analytics, and AI doubts in one focused workspace." },
       { property: "og:type", content: "website" },
+      { name: "twitter:title", content: "NeetForge — Premium NEET Preparation" },
+      { name: "twitter:description", content: "Modern NEET prep: tests, PYQs, lectures, analytics, and AI doubts in one focused workspace." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/25029b50-1c84-4801-9ac8-929ebd7e333d/id-preview-fadc0d51--122512c4-86ff-42bd-9f95-ffa9ccf28e3a.lovable.app-1779965964960.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/25029b50-1c84-4801-9ac8-929ebd7e333d/id-preview-fadc0d51--122512c4-86ff-42bd-9f95-ffa9ccf28e3a.lovable.app-1779965964960.png" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
