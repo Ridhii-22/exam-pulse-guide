@@ -10,8 +10,10 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TestsRouteImport } from './routes/tests'
+import { Route as SignupRouteImport } from './routes/signup'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PapersRouteImport } from './routes/papers'
+import { Route as LoginRouteImport } from './routes/login'
 import { Route as LecturesRouteImport } from './routes/lectures'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TestsMockRouteImport } from './routes/tests.mock'
@@ -19,6 +21,11 @@ import { Route as TestsMockRouteImport } from './routes/tests.mock'
 const TestsRoute = TestsRouteImport.update({
   id: '/tests',
   path: '/tests',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -29,6 +36,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const PapersRoute = PapersRouteImport.update({
   id: '/papers',
   path: '/papers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LecturesRoute = LecturesRouteImport.update({
@@ -50,16 +62,20 @@ const TestsMockRoute = TestsMockRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/lectures': typeof LecturesRoute
+  '/login': typeof LoginRoute
   '/papers': typeof PapersRoute
   '/profile': typeof ProfileRoute
+  '/signup': typeof SignupRoute
   '/tests': typeof TestsRouteWithChildren
   '/tests/mock': typeof TestsMockRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/lectures': typeof LecturesRoute
+  '/login': typeof LoginRoute
   '/papers': typeof PapersRoute
   '/profile': typeof ProfileRoute
+  '/signup': typeof SignupRoute
   '/tests': typeof TestsRouteWithChildren
   '/tests/mock': typeof TestsMockRoute
 }
@@ -67,8 +83,10 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/lectures': typeof LecturesRoute
+  '/login': typeof LoginRoute
   '/papers': typeof PapersRoute
   '/profile': typeof ProfileRoute
+  '/signup': typeof SignupRoute
   '/tests': typeof TestsRouteWithChildren
   '/tests/mock': typeof TestsMockRoute
 }
@@ -77,18 +95,30 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/lectures'
+    | '/login'
     | '/papers'
     | '/profile'
+    | '/signup'
     | '/tests'
     | '/tests/mock'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/lectures' | '/papers' | '/profile' | '/tests' | '/tests/mock'
+  to:
+    | '/'
+    | '/lectures'
+    | '/login'
+    | '/papers'
+    | '/profile'
+    | '/signup'
+    | '/tests'
+    | '/tests/mock'
   id:
     | '__root__'
     | '/'
     | '/lectures'
+    | '/login'
     | '/papers'
     | '/profile'
+    | '/signup'
     | '/tests'
     | '/tests/mock'
   fileRoutesById: FileRoutesById
@@ -96,8 +126,10 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LecturesRoute: typeof LecturesRoute
+  LoginRoute: typeof LoginRoute
   PapersRoute: typeof PapersRoute
   ProfileRoute: typeof ProfileRoute
+  SignupRoute: typeof SignupRoute
   TestsRoute: typeof TestsRouteWithChildren
 }
 
@@ -108,6 +140,13 @@ declare module '@tanstack/react-router' {
       path: '/tests'
       fullPath: '/tests'
       preLoaderRoute: typeof TestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -122,6 +161,13 @@ declare module '@tanstack/react-router' {
       path: '/papers'
       fullPath: '/papers'
       preLoaderRoute: typeof PapersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lectures': {
@@ -161,8 +207,10 @@ const TestsRouteWithChildren = TestsRoute._addFileChildren(TestsRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LecturesRoute: LecturesRoute,
+  LoginRoute: LoginRoute,
   PapersRoute: PapersRoute,
   ProfileRoute: ProfileRoute,
+  SignupRoute: SignupRoute,
   TestsRoute: TestsRouteWithChildren,
 }
 export const routeTree = rootRouteImport

@@ -1,8 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState, useMemo } from "react";
 import { ChevronLeft, ChevronRight, Flag, Save, Clock, X } from "lucide-react";
 import { Button, Pill } from "@/components/ui-bits";
 import { cn } from "@/lib/utils";
+import { AuthGuard } from "@/components/auth-guard";
+import { recordTestAttempt } from "@/lib/tracker";
 
 export const Route = createFileRoute("/tests/mock")({
   head: () => ({
@@ -20,7 +22,7 @@ const SECTIONS = ["Physics", "Chemistry", "Biology"] as const;
 const PER_SECTION = 15;
 
 function buildQuestions() {
-  const out: { id: number; section: (typeof SECTIONS)[number]; text: string; options: string[] }[] = [];
+  const out: { id: number; section: (typeof SECTIONS)[number]; text: string; options: string[]; correct: number }[] = [];
   let i = 1;
   for (const s of SECTIONS) {
     for (let q = 1; q <= PER_SECTION; q++) {
@@ -29,6 +31,7 @@ function buildQuestions() {
         section: s,
         text: `${s} Q${q}. Sample question text demonstrating the focused exam interface and clean typography.`,
         options: ["Option A — concise plausible distractor", "Option B — concise plausible distractor", "Option C — concise plausible distractor", "Option D — concise plausible distractor"],
+        correct: (q * 7) % 4,
       });
     }
   }
@@ -36,7 +39,16 @@ function buildQuestions() {
 }
 
 function MockTestPage() {
+  return (
+    <AuthGuard>
+      <MockTestInner />
+    </AuthGuard>
+  );
+}
+
+function MockTestInner() {
   const questions = useMemo(buildQuestions, []);
+  const navigate = useNavigate();
   const [section, setSection] = useState<(typeof SECTIONS)[number]>("Physics");
   const sectionQs = questions.filter((q) => q.section === section);
   const [activeId, setActiveId] = useState(sectionQs[0].id);
@@ -44,11 +56,34 @@ function MockTestPage() {
   const [marked, setMarked] = useState<Record<number, boolean>>({});
   const [visited, setVisited] = useState<Record<number, boolean>>({ [sectionQs[0].id]: true });
   const [seconds, setSeconds] = useState(60 * 60); // 60 min demo
+  const [submitting, setSubmitting] = useState(false);
+  const startedAt = useMemo(() => Date.now(), []);
 
   useEffect(() => {
     const id = setInterval(() => setSeconds((s) => Math.max(0, s - 1)), 1000);
     return () => clearInterval(id);
   }, []);
+
+  const submit = async () => {
+    setSubmitting(true);
+    let score = 0;
+    const qResults = questions.map((q) => {
+      const a = answers[q.id];
+      const skipped = a === undefined;
+      const is_correct = !skipped && a === q.correct;
+      if (is_correct) score++;
+      return { subject: q.section, chapter: `${q.section} Mock`, is_correct, skipped };
+    });
+    await recordTestAttempt({
+      title: "NEET Full Mock 07",
+      kind: "mock",
+      score,
+      total: questions.length,
+      time_taken_seconds: Math.round((Date.now() - startedAt) / 1000),
+      questions: qResults,
+    });
+    navigate({ to: "/tests" });
+  };
 
   const active = questions.find((q) => q.id === activeId)!;
 
@@ -194,7 +229,7 @@ function MockTestPage() {
             <Legend tone="primary" label="Answered & marked" />
             <Legend tone="muted" label="Not visited" />
           </div>
-          <Button className="w-full mt-6" variant="primary">Submit test</Button>
+          <Button className="w-full mt-6" variant="primary" disabled={submitting} onClick={submit}>{submitting ? "Submitting…" : "Submit test"}</Button>
         </aside>
       </div>
     </div>

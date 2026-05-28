@@ -1,9 +1,11 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
-import { Home, ClipboardList, FileText, PlayCircle, User, Moon, Sun, Sparkles, Flame } from "lucide-react";
+import { Home, ClipboardList, FileText, PlayCircle, User, Moon, Sun, Sparkles, Flame, LogOut } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { useTheme } from "@/lib/theme";
 import { cn } from "@/lib/utils";
 import { ChatbotFab } from "@/components/chatbot-fab";
+import { AuthGuard } from "@/components/auth-guard";
+import { useAuth } from "@/lib/auth";
 
 const nav = [
   { to: "/", label: "Home", icon: Home, exact: true },
@@ -15,11 +17,13 @@ const nav = [
 
 export function AppShell({ children }: { children?: ReactNode }) {
   const { theme, toggle } = useTheme();
+  const { signOut } = useAuth();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isActive = (to: string, exact?: boolean) =>
     exact ? pathname === to : pathname === to || pathname.startsWith(to + "/");
 
   return (
+    <AuthGuard>
     <div className="min-h-screen flex bg-background text-foreground">
       {/* Desktop sidebar */}
       <aside className="hidden lg:flex w-64 shrink-0 flex-col border-r border-border bg-surface px-4 py-6 sticky top-0 h-screen">
@@ -67,6 +71,12 @@ export function AppShell({ children }: { children?: ReactNode }) {
           >
             {theme === "dark" ? <Sun className="size-3.5" /> : <Moon className="size-3.5" />}
             {theme === "dark" ? "Light mode" : "Dark mode"}
+          </button>
+          <button
+            onClick={() => signOut()}
+            className="w-full flex items-center justify-center gap-2 text-xs text-muted-foreground hover:text-foreground transition-colors py-2"
+          >
+            <LogOut className="size-3.5" /> Sign out
           </button>
         </div>
       </aside>
@@ -117,6 +127,7 @@ export function AppShell({ children }: { children?: ReactNode }) {
 
       <ChatbotFab />
     </div>
+    </AuthGuard>
   );
 }
 
