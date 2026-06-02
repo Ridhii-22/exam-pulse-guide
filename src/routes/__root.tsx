@@ -39,16 +39,28 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">This page didn't load</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Something went wrong. Try again or head home.</p>
+        <h1 className="text-xl font-semibold tracking-tight text-foreground">
+          This page didn't load
+        </h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Something went wrong. Try again or head home.
+        </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
-            onClick={() => { router.invalidate(); reset(); }}
+            onClick={() => {
+              router.invalidate();
+              reset();
+            }}
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:opacity-90"
           >
             Try again
           </button>
-          <a href="/" className="rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent">Go home</a>
+          <a
+            href="/"
+            className="rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-accent"
+          >
+            Go home
+          </a>
         </div>
       </div>
     </div>
@@ -61,21 +73,34 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "NeetForge — Premium NEET Preparation" },
-      { name: "description", content: "Modern NEET prep: tests, PYQs, lectures, analytics, and AI doubts in one focused workspace." },
+      {
+        name: "description",
+        content:
+          "Modern NEET prep: tests, PYQs, lectures, analytics, and AI doubts in one focused workspace.",
+      },
       { property: "og:title", content: "NeetForge — Premium NEET Preparation" },
-      { property: "og:description", content: "Modern NEET prep: tests, PYQs, lectures, analytics, and AI doubts in one focused workspace." },
+      {
+        property: "og:description",
+        content:
+          "Modern NEET prep: tests, PYQs, lectures, analytics, and AI doubts in one focused workspace.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:title", content: "NeetForge — Premium NEET Preparation" },
-      { name: "twitter:description", content: "Modern NEET prep: tests, PYQs, lectures, analytics, and AI doubts in one focused workspace." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/25029b50-1c84-4801-9ac8-929ebd7e333d/id-preview-fadc0d51--122512c4-86ff-42bd-9f95-ffa9ccf28e3a.lovable.app-1779965964960.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/25029b50-1c84-4801-9ac8-929ebd7e333d/id-preview-fadc0d51--122512c4-86ff-42bd-9f95-ffa9ccf28e3a.lovable.app-1779965964960.png" },
+      {
+        name: "twitter:description",
+        content:
+          "Modern NEET prep: tests, PYQs, lectures, analytics, and AI doubts in one focused workspace.",
+      },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
+      },
     ],
   }),
   shellComponent: RootShell,

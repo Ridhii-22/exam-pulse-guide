@@ -11,12 +11,23 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TestsRouteImport } from './routes/tests'
 import { Route as SignupRouteImport } from './routes/signup'
+import { Route as SecureAdminRouteImport } from './routes/secure-admin'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PapersRouteImport } from './routes/papers'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LecturesRouteImport } from './routes/lectures'
+import { Route as DashboardManagementRouteImport } from './routes/dashboard-management'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SecureAdminIndexRouteImport } from './routes/secure-admin/index'
 import { Route as TestsMockRouteImport } from './routes/tests.mock'
+import { Route as SecureAdminTestsRouteImport } from './routes/secure-admin/tests'
+import { Route as SecureAdminSyllabusRouteImport } from './routes/secure-admin/syllabus'
+import { Route as SecureAdminSubjectsRouteImport } from './routes/secure-admin/subjects'
+import { Route as SecureAdminQuestionsRouteImport } from './routes/secure-admin/questions'
+import { Route as SecureAdminPapersRouteImport } from './routes/secure-admin/papers'
+import { Route as SecureAdminLecturesRouteImport } from './routes/secure-admin/lectures'
+import { Route as SecureAdminBulkImportRouteImport } from './routes/secure-admin/bulk-import'
+import { Route as SecureAdminAnalyticsRouteImport } from './routes/secure-admin/analytics'
 
 const TestsRoute = TestsRouteImport.update({
   id: '/tests',
@@ -26,6 +37,11 @@ const TestsRoute = TestsRouteImport.update({
 const SignupRoute = SignupRouteImport.update({
   id: '/signup',
   path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SecureAdminRoute = SecureAdminRouteImport.update({
+  id: '/secure-admin',
+  path: '/secure-admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -48,87 +64,203 @@ const LecturesRoute = LecturesRouteImport.update({
   path: '/lectures',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardManagementRoute = DashboardManagementRouteImport.update({
+  id: '/dashboard-management',
+  path: '/dashboard-management',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const SecureAdminIndexRoute = SecureAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SecureAdminRoute,
 } as any)
 const TestsMockRoute = TestsMockRouteImport.update({
   id: '/mock',
   path: '/mock',
   getParentRoute: () => TestsRoute,
 } as any)
+const SecureAdminTestsRoute = SecureAdminTestsRouteImport.update({
+  id: '/tests',
+  path: '/tests',
+  getParentRoute: () => SecureAdminRoute,
+} as any)
+const SecureAdminSyllabusRoute = SecureAdminSyllabusRouteImport.update({
+  id: '/syllabus',
+  path: '/syllabus',
+  getParentRoute: () => SecureAdminRoute,
+} as any)
+const SecureAdminSubjectsRoute = SecureAdminSubjectsRouteImport.update({
+  id: '/subjects',
+  path: '/subjects',
+  getParentRoute: () => SecureAdminRoute,
+} as any)
+const SecureAdminQuestionsRoute = SecureAdminQuestionsRouteImport.update({
+  id: '/questions',
+  path: '/questions',
+  getParentRoute: () => SecureAdminRoute,
+} as any)
+const SecureAdminPapersRoute = SecureAdminPapersRouteImport.update({
+  id: '/papers',
+  path: '/papers',
+  getParentRoute: () => SecureAdminRoute,
+} as any)
+const SecureAdminLecturesRoute = SecureAdminLecturesRouteImport.update({
+  id: '/lectures',
+  path: '/lectures',
+  getParentRoute: () => SecureAdminRoute,
+} as any)
+const SecureAdminBulkImportRoute = SecureAdminBulkImportRouteImport.update({
+  id: '/bulk-import',
+  path: '/bulk-import',
+  getParentRoute: () => SecureAdminRoute,
+} as any)
+const SecureAdminAnalyticsRoute = SecureAdminAnalyticsRouteImport.update({
+  id: '/analytics',
+  path: '/analytics',
+  getParentRoute: () => SecureAdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard-management': typeof DashboardManagementRoute
   '/lectures': typeof LecturesRoute
   '/login': typeof LoginRoute
   '/papers': typeof PapersRoute
   '/profile': typeof ProfileRoute
+  '/secure-admin': typeof SecureAdminRouteWithChildren
   '/signup': typeof SignupRoute
   '/tests': typeof TestsRouteWithChildren
+  '/secure-admin/analytics': typeof SecureAdminAnalyticsRoute
+  '/secure-admin/bulk-import': typeof SecureAdminBulkImportRoute
+  '/secure-admin/lectures': typeof SecureAdminLecturesRoute
+  '/secure-admin/papers': typeof SecureAdminPapersRoute
+  '/secure-admin/questions': typeof SecureAdminQuestionsRoute
+  '/secure-admin/subjects': typeof SecureAdminSubjectsRoute
+  '/secure-admin/syllabus': typeof SecureAdminSyllabusRoute
+  '/secure-admin/tests': typeof SecureAdminTestsRoute
   '/tests/mock': typeof TestsMockRoute
+  '/secure-admin/': typeof SecureAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard-management': typeof DashboardManagementRoute
   '/lectures': typeof LecturesRoute
   '/login': typeof LoginRoute
   '/papers': typeof PapersRoute
   '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
   '/tests': typeof TestsRouteWithChildren
+  '/secure-admin/analytics': typeof SecureAdminAnalyticsRoute
+  '/secure-admin/bulk-import': typeof SecureAdminBulkImportRoute
+  '/secure-admin/lectures': typeof SecureAdminLecturesRoute
+  '/secure-admin/papers': typeof SecureAdminPapersRoute
+  '/secure-admin/questions': typeof SecureAdminQuestionsRoute
+  '/secure-admin/subjects': typeof SecureAdminSubjectsRoute
+  '/secure-admin/syllabus': typeof SecureAdminSyllabusRoute
+  '/secure-admin/tests': typeof SecureAdminTestsRoute
   '/tests/mock': typeof TestsMockRoute
+  '/secure-admin': typeof SecureAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard-management': typeof DashboardManagementRoute
   '/lectures': typeof LecturesRoute
   '/login': typeof LoginRoute
   '/papers': typeof PapersRoute
   '/profile': typeof ProfileRoute
+  '/secure-admin': typeof SecureAdminRouteWithChildren
   '/signup': typeof SignupRoute
   '/tests': typeof TestsRouteWithChildren
+  '/secure-admin/analytics': typeof SecureAdminAnalyticsRoute
+  '/secure-admin/bulk-import': typeof SecureAdminBulkImportRoute
+  '/secure-admin/lectures': typeof SecureAdminLecturesRoute
+  '/secure-admin/papers': typeof SecureAdminPapersRoute
+  '/secure-admin/questions': typeof SecureAdminQuestionsRoute
+  '/secure-admin/subjects': typeof SecureAdminSubjectsRoute
+  '/secure-admin/syllabus': typeof SecureAdminSyllabusRoute
+  '/secure-admin/tests': typeof SecureAdminTestsRoute
   '/tests/mock': typeof TestsMockRoute
+  '/secure-admin/': typeof SecureAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/dashboard-management'
     | '/lectures'
     | '/login'
     | '/papers'
     | '/profile'
+    | '/secure-admin'
     | '/signup'
     | '/tests'
+    | '/secure-admin/analytics'
+    | '/secure-admin/bulk-import'
+    | '/secure-admin/lectures'
+    | '/secure-admin/papers'
+    | '/secure-admin/questions'
+    | '/secure-admin/subjects'
+    | '/secure-admin/syllabus'
+    | '/secure-admin/tests'
     | '/tests/mock'
+    | '/secure-admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/dashboard-management'
     | '/lectures'
     | '/login'
     | '/papers'
     | '/profile'
     | '/signup'
     | '/tests'
+    | '/secure-admin/analytics'
+    | '/secure-admin/bulk-import'
+    | '/secure-admin/lectures'
+    | '/secure-admin/papers'
+    | '/secure-admin/questions'
+    | '/secure-admin/subjects'
+    | '/secure-admin/syllabus'
+    | '/secure-admin/tests'
     | '/tests/mock'
+    | '/secure-admin'
   id:
     | '__root__'
     | '/'
+    | '/dashboard-management'
     | '/lectures'
     | '/login'
     | '/papers'
     | '/profile'
+    | '/secure-admin'
     | '/signup'
     | '/tests'
+    | '/secure-admin/analytics'
+    | '/secure-admin/bulk-import'
+    | '/secure-admin/lectures'
+    | '/secure-admin/papers'
+    | '/secure-admin/questions'
+    | '/secure-admin/subjects'
+    | '/secure-admin/syllabus'
+    | '/secure-admin/tests'
     | '/tests/mock'
+    | '/secure-admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardManagementRoute: typeof DashboardManagementRoute
   LecturesRoute: typeof LecturesRoute
   LoginRoute: typeof LoginRoute
   PapersRoute: typeof PapersRoute
   ProfileRoute: typeof ProfileRoute
+  SecureAdminRoute: typeof SecureAdminRouteWithChildren
   SignupRoute: typeof SignupRoute
   TestsRoute: typeof TestsRouteWithChildren
 }
@@ -147,6 +279,13 @@ declare module '@tanstack/react-router' {
       path: '/signup'
       fullPath: '/signup'
       preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/secure-admin': {
+      id: '/secure-admin'
+      path: '/secure-admin'
+      fullPath: '/secure-admin'
+      preLoaderRoute: typeof SecureAdminRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -177,12 +316,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LecturesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard-management': {
+      id: '/dashboard-management'
+      path: '/dashboard-management'
+      fullPath: '/dashboard-management'
+      preLoaderRoute: typeof DashboardManagementRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/secure-admin/': {
+      id: '/secure-admin/'
+      path: '/'
+      fullPath: '/secure-admin/'
+      preLoaderRoute: typeof SecureAdminIndexRouteImport
+      parentRoute: typeof SecureAdminRoute
     }
     '/tests/mock': {
       id: '/tests/mock'
@@ -191,8 +344,92 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TestsMockRouteImport
       parentRoute: typeof TestsRoute
     }
+    '/secure-admin/tests': {
+      id: '/secure-admin/tests'
+      path: '/tests'
+      fullPath: '/secure-admin/tests'
+      preLoaderRoute: typeof SecureAdminTestsRouteImport
+      parentRoute: typeof SecureAdminRoute
+    }
+    '/secure-admin/syllabus': {
+      id: '/secure-admin/syllabus'
+      path: '/syllabus'
+      fullPath: '/secure-admin/syllabus'
+      preLoaderRoute: typeof SecureAdminSyllabusRouteImport
+      parentRoute: typeof SecureAdminRoute
+    }
+    '/secure-admin/subjects': {
+      id: '/secure-admin/subjects'
+      path: '/subjects'
+      fullPath: '/secure-admin/subjects'
+      preLoaderRoute: typeof SecureAdminSubjectsRouteImport
+      parentRoute: typeof SecureAdminRoute
+    }
+    '/secure-admin/questions': {
+      id: '/secure-admin/questions'
+      path: '/questions'
+      fullPath: '/secure-admin/questions'
+      preLoaderRoute: typeof SecureAdminQuestionsRouteImport
+      parentRoute: typeof SecureAdminRoute
+    }
+    '/secure-admin/papers': {
+      id: '/secure-admin/papers'
+      path: '/papers'
+      fullPath: '/secure-admin/papers'
+      preLoaderRoute: typeof SecureAdminPapersRouteImport
+      parentRoute: typeof SecureAdminRoute
+    }
+    '/secure-admin/lectures': {
+      id: '/secure-admin/lectures'
+      path: '/lectures'
+      fullPath: '/secure-admin/lectures'
+      preLoaderRoute: typeof SecureAdminLecturesRouteImport
+      parentRoute: typeof SecureAdminRoute
+    }
+    '/secure-admin/bulk-import': {
+      id: '/secure-admin/bulk-import'
+      path: '/bulk-import'
+      fullPath: '/secure-admin/bulk-import'
+      preLoaderRoute: typeof SecureAdminBulkImportRouteImport
+      parentRoute: typeof SecureAdminRoute
+    }
+    '/secure-admin/analytics': {
+      id: '/secure-admin/analytics'
+      path: '/analytics'
+      fullPath: '/secure-admin/analytics'
+      preLoaderRoute: typeof SecureAdminAnalyticsRouteImport
+      parentRoute: typeof SecureAdminRoute
+    }
   }
 }
+
+interface SecureAdminRouteChildren {
+  SecureAdminAnalyticsRoute: typeof SecureAdminAnalyticsRoute
+  SecureAdminBulkImportRoute: typeof SecureAdminBulkImportRoute
+  SecureAdminLecturesRoute: typeof SecureAdminLecturesRoute
+  SecureAdminPapersRoute: typeof SecureAdminPapersRoute
+  SecureAdminQuestionsRoute: typeof SecureAdminQuestionsRoute
+  SecureAdminSubjectsRoute: typeof SecureAdminSubjectsRoute
+  SecureAdminSyllabusRoute: typeof SecureAdminSyllabusRoute
+  SecureAdminTestsRoute: typeof SecureAdminTestsRoute
+  SecureAdminIndexRoute: typeof SecureAdminIndexRoute
+}
+
+const SecureAdminRouteChildren: SecureAdminRouteChildren = {
+  SecureAdminAnalyticsRoute: SecureAdminAnalyticsRoute,
+  SecureAdminBulkImportRoute: SecureAdminBulkImportRoute,
+  SecureAdminLecturesRoute: SecureAdminLecturesRoute,
+  SecureAdminPapersRoute: SecureAdminPapersRoute,
+  SecureAdminQuestionsRoute: SecureAdminQuestionsRoute,
+  SecureAdminSubjectsRoute: SecureAdminSubjectsRoute,
+  SecureAdminSyllabusRoute: SecureAdminSyllabusRoute,
+  SecureAdminTestsRoute: SecureAdminTestsRoute,
+  SecureAdminIndexRoute: SecureAdminIndexRoute,
+}
+
+const SecureAdminRouteWithChildren = SecureAdminRoute._addFileChildren(
+  SecureAdminRouteChildren,
+)
 
 interface TestsRouteChildren {
   TestsMockRoute: typeof TestsMockRoute
@@ -206,13 +443,25 @@ const TestsRouteWithChildren = TestsRoute._addFileChildren(TestsRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardManagementRoute: DashboardManagementRoute,
   LecturesRoute: LecturesRoute,
   LoginRoute: LoginRoute,
   PapersRoute: PapersRoute,
   ProfileRoute: ProfileRoute,
+  SecureAdminRoute: SecureAdminRouteWithChildren,
   SignupRoute: SignupRoute,
   TestsRoute: TestsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

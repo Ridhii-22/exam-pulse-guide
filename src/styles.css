@@ -127,7 +127,8 @@
   * {
     border-color: var(--color-border);
   }
-  html, body {
+  html,
+  body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
@@ -144,7 +145,10 @@
     box-shadow: var(--shadow-soft);
   }
   .hover-lift {
-    transition: transform 200ms ease, box-shadow 200ms ease, border-color 200ms ease;
+    transition:
+      transform 200ms ease,
+      box-shadow 200ms ease,
+      border-color 200ms ease;
   }
   .hover-lift:hover {
     transform: translateY(-2px);

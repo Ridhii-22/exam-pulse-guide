@@ -8,7 +8,10 @@ export function ChatbotFab() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
   const [msgs, setMsgs] = useState<Msg[]>([
-    { role: "ai", text: "Hi! I'm your NEET doubt assistant. Ask me anything — concepts, problems, or NCERT lines." },
+    {
+      role: "ai",
+      text: "Hi! I'm your NEET doubt assistant. Ask me anything — concepts, problems, or NCERT lines.",
+    },
   ]);
 
   const send = () => {
@@ -17,7 +20,10 @@ export function ChatbotFab() {
     setMsgs((m) => [
       ...m,
       { role: "user", text: q },
-      { role: "ai", text: "Here's a clean explanation — (connect Lovable Cloud + AI Gateway to enable live answers)." },
+      {
+        role: "ai",
+        text: "Here's a clean explanation — (connect Lovable Cloud + AI Gateway to enable live answers).",
+      },
     ]);
     setInput("");
   };

@@ -26,7 +26,10 @@ function SignupPage() {
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password.length < 6) { setErr("Password must be at least 6 characters."); return; }
+    if (password.length < 6) {
+      setErr("Password must be at least 6 characters.");
+      return;
+    }
     setBusy(true);
     setErr(null);
     const { error } = await signUp(email, password, fullName, year);
@@ -47,17 +50,49 @@ function SignupPage() {
           </div>
         </div>
         <h1 className="text-xl font-semibold tracking-tight">Create your account</h1>
-        <p className="text-sm text-muted-foreground mt-1 mb-6">Track every chapter, test, and streak in one place.</p>
+        <p className="text-sm text-muted-foreground mt-1 mb-6">
+          Track every chapter, test, and streak in one place.
+        </p>
         <form onSubmit={submit} className="space-y-3">
-          <Field label="Full name" value={fullName} onChange={setFullName} required autoComplete="name" />
-          <Field label="Email" type="email" value={email} onChange={setEmail} required autoComplete="email" />
-          <Field label="Password" type="password" value={password} onChange={setPassword} required autoComplete="new-password" />
-          <Field label="Target exam year (optional)" type="number" value={year} onChange={setYear} />
+          <Field
+            label="Full name"
+            value={fullName}
+            onChange={setFullName}
+            required
+            autoComplete="name"
+          />
+          <Field
+            label="Email"
+            type="email"
+            value={email}
+            onChange={setEmail}
+            required
+            autoComplete="email"
+          />
+          <Field
+            label="Password"
+            type="password"
+            value={password}
+            onChange={setPassword}
+            required
+            autoComplete="new-password"
+          />
+          <Field
+            label="Target exam year (optional)"
+            type="number"
+            value={year}
+            onChange={setYear}
+          />
           {err && <div className="text-xs text-destructive">{err}</div>}
-          <Button type="submit" className="w-full" disabled={busy}>{busy ? "Creating account…" : "Create account"}</Button>
+          <Button type="submit" className="w-full" disabled={busy}>
+            {busy ? "Creating account…" : "Create account"}
+          </Button>
         </form>
         <p className="text-xs text-muted-foreground mt-6 text-center">
-          Already have an account? <Link to="/login" className="text-primary hover:underline">Sign in</Link>
+          Already have an account?{" "}
+          <Link to="/login" className="text-primary hover:underline">
+            Sign in
+          </Link>
         </p>
       </div>
     </div>

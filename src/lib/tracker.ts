@@ -5,7 +5,14 @@ async function uid() {
   return data.user?.id ?? null;
 }
 
-export async function touchActivity(patch: Partial<{ questions_solved: number; lectures_watched: number; tests_taken: number; study_seconds: number }>) {
+export async function touchActivity(
+  patch: Partial<{
+    questions_solved: number;
+    lectures_watched: number;
+    tests_taken: number;
+    study_seconds: number;
+  }>,
+) {
   const user_id = await uid();
   if (!user_id) return;
   const today = new Date().toISOString().slice(0, 10);
@@ -52,7 +59,12 @@ export async function recordLectureProgress(args: {
   if (completed) await touchActivity({ lectures_watched: 1 });
 }
 
-export type QuestionResult = { subject: string; chapter: string; is_correct: boolean; skipped?: boolean };
+export type QuestionResult = {
+  subject: string;
+  chapter: string;
+  is_correct: boolean;
+  skipped?: boolean;
+};
 
 export async function recordTestAttempt(args: {
   test_id?: string;

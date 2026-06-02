@@ -10,7 +10,10 @@ export const Route = createFileRoute("/tests/mock")({
   head: () => ({
     meta: [
       { title: "Full Mock Test — NeetForge" },
-      { name: "description", content: "Real NEET CBT experience with question palette, timer, and review mode." },
+      {
+        name: "description",
+        content: "Real NEET CBT experience with question palette, timer, and review mode.",
+      },
     ],
   }),
   component: MockTestPage,
@@ -22,7 +25,13 @@ const SECTIONS = ["Physics", "Chemistry", "Biology"] as const;
 const PER_SECTION = 15;
 
 function buildQuestions() {
-  const out: { id: number; section: (typeof SECTIONS)[number]; text: string; options: string[]; correct: number }[] = [];
+  const out: {
+    id: number;
+    section: (typeof SECTIONS)[number];
+    text: string;
+    options: string[];
+    correct: number;
+  }[] = [];
   let i = 1;
   for (const s of SECTIONS) {
     for (let q = 1; q <= PER_SECTION; q++) {
@@ -30,7 +39,12 @@ function buildQuestions() {
         id: i++,
         section: s,
         text: `${s} Q${q}. Sample question text demonstrating the focused exam interface and clean typography.`,
-        options: ["Option A — concise plausible distractor", "Option B — concise plausible distractor", "Option C — concise plausible distractor", "Option D — concise plausible distractor"],
+        options: [
+          "Option A — concise plausible distractor",
+          "Option B — concise plausible distractor",
+          "Option C — concise plausible distractor",
+          "Option D — concise plausible distractor",
+        ],
         correct: (q * 7) % 4,
       });
     }
@@ -112,7 +126,10 @@ function MockTestInner() {
       {/* Top bar */}
       <header className="border-b border-border bg-surface px-4 lg:px-6 h-14 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Link to="/tests" className="size-9 grid place-items-center rounded-lg hover:bg-surface-2 transition">
+          <Link
+            to="/tests"
+            className="size-9 grid place-items-center rounded-lg hover:bg-surface-2 transition"
+          >
             <X className="size-4" />
           </Link>
           <div>
@@ -137,7 +154,9 @@ function MockTestInner() {
             }}
             className={cn(
               "px-4 py-3 text-sm font-medium border-b-2 transition-colors -mb-px",
-              section === s ? "border-primary text-foreground" : "border-transparent text-muted-foreground hover:text-foreground",
+              section === s
+                ? "border-primary text-foreground"
+                : "border-transparent text-muted-foreground hover:text-foreground",
             )}
           >
             {s}
@@ -149,7 +168,9 @@ function MockTestInner() {
         {/* Question area */}
         <div className="p-4 lg:p-8 flex flex-col">
           <div className="flex items-center justify-between mb-4">
-            <Pill>Question {sectionQs.findIndex((q) => q.id === active.id) + 1} of {PER_SECTION}</Pill>
+            <Pill>
+              Question {sectionQs.findIndex((q) => q.id === active.id) + 1} of {PER_SECTION}
+            </Pill>
             <Pill tone="info">+4 / -1</Pill>
           </div>
           <p className="text-base md:text-lg leading-relaxed">{active.text}</p>
@@ -163,11 +184,20 @@ function MockTestInner() {
                   onClick={() => setAnswers((a) => ({ ...a, [active.id]: idx }))}
                   className={cn(
                     "w-full text-left px-4 py-3 rounded-xl border transition",
-                    selected ? "border-primary bg-primary/5" : "border-border hover:border-primary/40 hover:bg-surface-2",
+                    selected
+                      ? "border-primary bg-primary/5"
+                      : "border-border hover:border-primary/40 hover:bg-surface-2",
                   )}
                 >
                   <span className="flex items-center gap-3">
-                    <span className={cn("size-6 rounded-full grid place-items-center text-xs font-semibold border", selected ? "border-primary bg-primary text-primary-foreground" : "border-border")}>
+                    <span
+                      className={cn(
+                        "size-6 rounded-full grid place-items-center text-xs font-semibold border",
+                        selected
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border",
+                      )}
+                    >
                       {String.fromCharCode(65 + idx)}
                     </span>
                     <span className="text-sm">{opt}</span>
@@ -178,17 +208,40 @@ function MockTestInner() {
           </div>
 
           <div className="mt-auto pt-6 flex flex-wrap items-center gap-2">
-            <Button variant="outline" onClick={() => { const i = sectionQs.findIndex((q) => q.id === active.id); if (i > 0) goTo(sectionQs[i - 1].id); }}>
+            <Button
+              variant="outline"
+              onClick={() => {
+                const i = sectionQs.findIndex((q) => q.id === active.id);
+                if (i > 0) goTo(sectionQs[i - 1].id);
+              }}
+            >
               <ChevronLeft className="size-4" /> Previous
             </Button>
-            <Button variant="secondary" onClick={() => setMarked((m) => ({ ...m, [active.id]: !m[active.id] }))}>
+            <Button
+              variant="secondary"
+              onClick={() => setMarked((m) => ({ ...m, [active.id]: !m[active.id] }))}
+            >
               <Flag className="size-4" /> {marked[active.id] ? "Unmark" : "Mark for review"}
             </Button>
-            <Button variant="ghost" onClick={() => setAnswers((a) => { const n = { ...a }; delete n[active.id]; return n; })}>
+            <Button
+              variant="ghost"
+              onClick={() =>
+                setAnswers((a) => {
+                  const n = { ...a };
+                  delete n[active.id];
+                  return n;
+                })
+              }
+            >
               Clear
             </Button>
             <div className="flex-1" />
-            <Button onClick={() => { const i = sectionQs.findIndex((q) => q.id === active.id); if (i < sectionQs.length - 1) goTo(sectionQs[i + 1].id); }}>
+            <Button
+              onClick={() => {
+                const i = sectionQs.findIndex((q) => q.id === active.id);
+                if (i < sectionQs.length - 1) goTo(sectionQs[i + 1].id);
+              }}
+            >
               <Save className="size-4" /> Save & Next <ChevronRight className="size-4" />
             </Button>
           </div>
@@ -196,15 +249,17 @@ function MockTestInner() {
 
         {/* Palette */}
         <aside className="border-t lg:border-t-0 lg:border-l border-border bg-surface p-4 lg:p-5 overflow-y-auto">
-          <div className="text-xs uppercase tracking-wider text-muted-foreground mb-3">Question palette</div>
+          <div className="text-xs uppercase tracking-wider text-muted-foreground mb-3">
+            Question palette
+          </div>
           <div className="grid grid-cols-6 lg:grid-cols-5 gap-2">
             {sectionQs.map((q, i) => {
               const st = statusOf(q.id);
               const styles: Record<Status, string> = {
                 "not-visited": "bg-surface-2 text-muted-foreground border-border",
                 "not-answered": "bg-destructive/15 text-destructive border-destructive/30",
-                "answered": "bg-success/15 text-success border-success/30",
-                "marked": "bg-info/15 text-info border-info/30",
+                answered: "bg-success/15 text-success border-success/30",
+                marked: "bg-info/15 text-info border-info/30",
                 "answered-marked": "bg-primary/15 text-primary border-primary/40",
               };
               return (
@@ -229,14 +284,22 @@ function MockTestInner() {
             <Legend tone="primary" label="Answered & marked" />
             <Legend tone="muted" label="Not visited" />
           </div>
-          <Button className="w-full mt-6" variant="primary" disabled={submitting} onClick={submit}>{submitting ? "Submitting…" : "Submit test"}</Button>
+          <Button className="w-full mt-6" variant="primary" disabled={submitting} onClick={submit}>
+            {submitting ? "Submitting…" : "Submit test"}
+          </Button>
         </aside>
       </div>
     </div>
   );
 }
 
-function Legend({ tone, label }: { tone: "success" | "danger" | "info" | "primary" | "muted"; label: string }) {
+function Legend({
+  tone,
+  label,
+}: {
+  tone: "success" | "danger" | "info" | "primary" | "muted";
+  label: string;
+}) {
   const map: Record<string, string> = {
     success: "bg-success",
     danger: "bg-destructive",

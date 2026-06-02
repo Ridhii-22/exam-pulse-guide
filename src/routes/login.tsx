@@ -11,7 +11,7 @@ export const Route = createFileRoute("/login")({
 });
 
 function LoginPage() {
-  const { signIn, user } = useAuth();
+  const { signIn, user, role, loading } = useAuth();
   const navigate = useNavigate();
   const { redirect } = Route.useSearch();
   const [email, setEmail] = useState("");
@@ -20,17 +20,40 @@ function LoginPage() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (user) navigate({ to: redirect || "/", replace: true });
-  }, [user, navigate, redirect]);
+    if (!loading && user) {
+      navigate({ to: role === "admin" ? "/secure-admin" : redirect || "/", replace: true });
+    }
+  }, [user, role, loading, navigate, redirect]);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setBusy(true);
     setErr(null);
+
     const { error } = await signIn(email, password);
     setBusy(false);
-    if (error) setErr(error);
+
+    if (error) {
+      setErr(error);
+    }
+    // successful sign-in will be handled by onAuthStateChange -> role -> effect above
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen grid place-items-center bg-background px-4 text-sm text-muted-foreground">
+        Loading…
+      </div>
+    );
+  }
+
+  if (user) {
+    return (
+      <div className="min-h-screen grid place-items-center bg-background px-4 text-sm text-muted-foreground">
+        Redirecting…
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen grid place-items-center bg-background px-4">
@@ -47,20 +70,53 @@ function LoginPage() {
         <h1 className="text-xl font-semibold tracking-tight">Welcome back</h1>
         <p className="text-sm text-muted-foreground mt-1 mb-6">Sign in to continue your prep.</p>
         <form onSubmit={submit} className="space-y-3">
-          <Field label="Email" type="email" value={email} onChange={setEmail} autoComplete="email" required />
-          <Field label="Password" type="password" value={password} onChange={setPassword} autoComplete="current-password" required />
+          <Field
+            label="Email"
+            type="email"
+            value={email}
+            onChange={setEmail}
+            autoComplete="email"
+            required
+          />
+          <Field
+            label="Password"
+            type="password"
+            value={password}
+            onChange={setPassword}
+            autoComplete="current-password"
+            required
+          />
           {err && <div className="text-xs text-destructive">{err}</div>}
-          <Button type="submit" className="w-full" disabled={busy}>{busy ? "Signing in…" : "Sign in"}</Button>
+          <Button type="submit" className="w-full" disabled={busy}>
+            {busy ? "Signing in…" : "Sign in"}
+          </Button>
         </form>
         <p className="text-xs text-muted-foreground mt-6 text-center">
-          New here? <Link to="/signup" className="text-primary hover:underline">Create an account</Link>
+          New here?{" "}
+          <Link to="/signup" className="text-primary hover:underline">
+            Create an account
+          </Link>
         </p>
       </div>
     </div>
   );
 }
 
-export function Field({ label, value, onChange, type = "text", required, autoComplete }: { label: string; value: string; onChange: (v: string) => void; type?: string; required?: boolean; autoComplete?: string }) {
+export function Field({
+  label,
+  value,
+  onChange,
+  type = "text",
+  required,
+  autoComplete,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  type?: string;
+  required?: boolean;
+  autoComplete?: string;
+}) {
   return (
     <label className="block">
       <span className="text-xs font-medium text-muted-foreground">{label}</span>

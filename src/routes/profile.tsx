@@ -9,7 +9,11 @@ export const Route = createFileRoute("/profile")({
   head: () => ({
     meta: [
       { title: "Profile — NeetForge" },
-      { name: "description", content: "Your study analytics: streak, XP, accuracy, consistency heatmap, and achievement badges." },
+      {
+        name: "description",
+        content:
+          "Your study analytics: streak, XP, accuracy, consistency heatmap, and achievement badges.",
+      },
     ],
   }),
   component: ProfilePage,
@@ -27,18 +31,26 @@ function ProfilePage() {
         <PageHeader
           title="Profile & Progress"
           subtitle="The numbers behind your prep."
-          action={<Button variant="outline" size="sm"><Settings className="size-3.5" /> Settings</Button>}
+          action={
+            <Button variant="outline" size="sm">
+              <Settings className="size-3.5" /> Settings
+            </Button>
+          }
         />
 
         {/* Identity */}
         <Card className="mb-6 flex flex-col md:flex-row md:items-center gap-5">
-          <div className="size-16 rounded-2xl bg-primary/15 text-primary grid place-items-center text-xl font-semibold">A</div>
+          <div className="size-16 rounded-2xl bg-primary/15 text-primary grid place-items-center text-xl font-semibold">
+            A
+          </div>
           <div className="flex-1">
             <div className="flex items-center gap-2">
               <h2 className="text-lg font-semibold">Aarav Sharma</h2>
               <Pill tone="info">Level 14</Pill>
             </div>
-            <div className="text-sm text-muted-foreground">NEET 2026 aspirant · Joined Jan 2025</div>
+            <div className="text-sm text-muted-foreground">
+              NEET 2026 aspirant · Joined Jan 2025
+            </div>
             <div className="mt-3 max-w-md">
               <div className="flex justify-between text-xs mb-1">
                 <span className="text-muted-foreground">XP to Level 15</span>
@@ -51,9 +63,19 @@ function ProfilePage() {
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-6">
           <Stat label="Streak" value="12d" hint="Best: 21" icon={<Flame className="size-5" />} />
-          <Stat label="Questions" value="5,470" hint="Solved" icon={<Target className="size-5" />} />
+          <Stat
+            label="Questions"
+            value="5,470"
+            hint="Solved"
+            icon={<Target className="size-5" />}
+          />
           <Stat label="Tests" value="86" hint="Attempted" icon={<BookCheck className="size-5" />} />
-          <Stat label="Watch time" value="142h" hint="All-time" icon={<Clock className="size-5" />} />
+          <Stat
+            label="Watch time"
+            value="142h"
+            hint="All-time"
+            icon={<Clock className="size-5" />}
+          />
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
@@ -95,11 +117,26 @@ function ProfilePage() {
           </Card>
 
           <Card>
-            <h3 className="font-semibold mb-4 flex items-center gap-2"><Award className="size-4 text-warning" /> Achievements</h3>
+            <h3 className="font-semibold mb-4 flex items-center gap-2">
+              <Award className="size-4 text-warning" /> Achievements
+            </h3>
             <div className="space-y-3">
               {badges.map((b) => (
-                <div key={b.name} className={cn("flex items-center gap-3 p-2 rounded-lg", b.earned ? "bg-surface-2" : "opacity-50")}>
-                  <div className={cn("size-9 rounded-lg grid place-items-center", b.earned ? "bg-primary/15 text-primary" : "bg-surface-2 text-muted-foreground")}>
+                <div
+                  key={b.name}
+                  className={cn(
+                    "flex items-center gap-3 p-2 rounded-lg",
+                    b.earned ? "bg-surface-2" : "opacity-50",
+                  )}
+                >
+                  <div
+                    className={cn(
+                      "size-9 rounded-lg grid place-items-center",
+                      b.earned
+                        ? "bg-primary/15 text-primary"
+                        : "bg-surface-2 text-muted-foreground",
+                    )}
+                  >
                     <Award className="size-4" />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -115,7 +152,9 @@ function ProfilePage() {
           <Card className="lg:col-span-2">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-semibold">Subject mastery</h3>
-              <Pill><TrendingUp className="size-3" /> Trending up</Pill>
+              <Pill>
+                <TrendingUp className="size-3" /> Trending up
+              </Pill>
             </div>
             <div className="space-y-4">
               {subjectProgress.map((s) => (
@@ -124,7 +163,10 @@ function ProfilePage() {
                     <span className="font-medium">{s.subject}</span>
                     <span className="text-muted-foreground">{s.accuracy}% accuracy</span>
                   </div>
-                  <ProgressBar value={s.accuracy} tone={s.accuracy > 75 ? "success" : s.accuracy > 60 ? "primary" : "warning"} />
+                  <ProgressBar
+                    value={s.accuracy}
+                    tone={s.accuracy > 75 ? "success" : s.accuracy > 60 ? "primary" : "warning"}
+                  />
                 </div>
               ))}
             </div>

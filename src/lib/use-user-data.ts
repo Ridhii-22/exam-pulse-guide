@@ -80,6 +80,9 @@ export function useDashboardData() {
       const totalCorrect = (questions.data ?? []).filter((q) => q.is_correct).length;
       const avgAccuracy = totalQuestions ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
       const studySeconds = (activity.data ?? []).reduce((a, b) => a + (b.study_seconds ?? 0), 0);
+      const testsAttempted = tests.data?.length ?? 0;
+      const papersSolved = (tests.data ?? []).filter((t) => t.kind === "paper").length;
+      const videosCompleted = (lectures.data ?? []).filter((l) => l.completed).length;
 
       return {
         profile: profile.data,
@@ -92,6 +95,9 @@ export function useDashboardData() {
         totalQuestions,
         avgAccuracy,
         studyHours: Math.round(studySeconds / 360) / 10,
+        testsAttempted,
+        papersSolved,
+        videosCompleted,
       };
     },
   });
@@ -104,7 +110,10 @@ export function useLectureProgressMap() {
     queryKey: ["lecture-progress", user?.id],
     queryFn: async () => {
       const { data } = await supabase.from("lecture_progress").select("*").eq("user_id", user!.id);
-      const map: Record<string, { progress_percent: number; completed: boolean; last_position_seconds: number }> = {};
+      const map: Record<
+        string,
+        { progress_percent: number; completed: boolean; last_position_seconds: number }
+      > = {};
       for (const r of data ?? []) {
         map[r.lecture_id] = {
           progress_percent: r.progress_percent,
