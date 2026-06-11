@@ -6,6 +6,7 @@ import { Card, Pill, Button, ProgressBar } from "@/components/ui-bits";
 import { BookOpen, History, Shuffle, Trophy, ChevronRight, Clock, Target } from "lucide-react";
 import { subjects as fallbackSubjects, recentTests } from "@/lib/mock-data";
 import { listPublicTests } from "@/lib/api/content.functions";
+import { showToast } from "@/lib/toast";
 
 export const Route = createFileRoute("/tests")({
   head: () => ({
@@ -101,7 +102,7 @@ function TestsPage() {
                         </Button>
                       </Link>
                     ) : (
-                      <Button size="sm" variant="outline">
+                      <Button size="sm" variant="outline" onClick={() => showToast("Coming Soon", "info")}>
                         Open <ChevronRight className="size-3.5" />
                       </Button>
                     )}
@@ -129,7 +130,7 @@ function TestsPage() {
                     <Row icon={<History className="size-3.5" />} label="PYQ test" />
                     <Row icon={<Shuffle className="size-3.5" />} label="Random practice" />
                   </div>
-                  <Button variant="outline" size="sm" className="w-full mt-4">
+                  <Button variant="outline" size="sm" className="w-full mt-4" onClick={() => showToast("Coming Soon", "info")}>
                     Explore <ChevronRight className="size-3.5" />
                   </Button>
                 </Card>

@@ -4,6 +4,7 @@ import { Card, Stat, Pill, ProgressBar, Button } from "@/components/ui-bits";
 import { Flame, Target, Clock, TrendingUp, Award, BookCheck, Settings } from "lucide-react";
 import { subjectProgress, weakChapters, badges } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
+import { showToast } from "@/lib/toast";
 
 export const Route = createFileRoute("/profile")({
   head: () => ({
@@ -32,7 +33,7 @@ function ProfilePage() {
           title="Profile & Progress"
           subtitle="The numbers behind your prep."
           action={
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" onClick={() => showToast("Coming Soon", "info")}>
               <Settings className="size-3.5" /> Settings
             </Button>
           }

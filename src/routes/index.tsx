@@ -12,8 +12,14 @@ import {
   PlayCircle,
   ArrowRight,
   Sparkles,
+  Bookmark,
+  CheckCircle,
 } from "lucide-react";
 import { useDashboardData } from "@/lib/use-user-data";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "@/lib/auth";
+import { getPaperStatistics, getBookmarkedPapers, listRecentActivity } from "@/lib/api/student.functions";
+import { showToast } from "@/lib/toast";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -30,6 +36,7 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
+  const { session } = useAuth();
   const { data } = useDashboardData();
   const firstName = (data?.profile?.full_name ?? "").split(" ")[0] || "back";
   const streak = data?.streak ?? 0;
@@ -40,6 +47,27 @@ function HomePage() {
   const testsAttempted = data?.testsAttempted ?? 0;
   const papersSolved = data?.papersSolved ?? 0;
   const videosCompleted = data?.videosCompleted ?? 0;
+
+  // Fetch paper statistics
+  const { data: paperStats } = useQuery({
+    queryKey: ["paper-statistics", session?.access_token],
+    queryFn: async () => session ? await getPaperStatistics({ data: { sessionToken: session.access_token } }) : null,
+    enabled: !!session,
+  });
+
+  // Fetch bookmarked papers
+  const { data: bookmarkedPapers } = useQuery({
+    queryKey: ["bookmarked-papers", session?.access_token],
+    queryFn: async () => session ? await getBookmarkedPapers({ data: { sessionToken: session.access_token } }) : [],
+    enabled: !!session,
+  });
+
+  // Fetch recent activity
+  const { data: recentActivity } = useQuery({
+    queryKey: ["recent-activity", session?.access_token],
+    queryFn: async () => session ? await listRecentActivity({ data: { sessionToken: session.access_token, limit: 5 } }) : [],
+    enabled: !!session,
+  });
 
   const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   const today = new Date();
@@ -113,6 +141,32 @@ function HomePage() {
             icon={<TrendingUp className="size-5" />}
           />
         </div>
+
+        {session && paperStats && (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 mb-8">
+            <Stat
+              label="Total Papers"
+              value={paperStats.total}
+              icon={<FileText className="size-5" />}
+            />
+            <Stat
+              label="Completed"
+              value={paperStats.completed}
+              hint={`${paperStats.percentage}%`}
+              icon={<CheckCircle className="size-5" />}
+            />
+            <Stat
+              label="Remaining"
+              value={paperStats.remaining}
+              icon={<ClipboardList className="size-5" />}
+            />
+            <Stat
+              label="Bookmarked"
+              value={bookmarkedPapers?.length || 0}
+              icon={<Bookmark className="size-5" />}
+            />
+          </div>
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           <div className="lg:col-span-2 space-y-5">
@@ -266,10 +320,74 @@ function HomePage() {
                   ))}
                 </div>
               )}
-              <Button variant="outline" size="sm" className="w-full mt-4">
+              <Button variant="outline" size="sm" className="w-full mt-4" onClick={() => showToast("Coming Soon", "info")}>
                 Start revision <ChevronRight className="size-3.5" />
               </Button>
             </Card>
+
+            {session && (
+              <Card>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-semibold">Bookmarked Papers</h3>
+                  <Link to="/papers" className="text-xs text-primary hover:underline">
+                    View all
+                  </Link>
+                </div>
+                {bookmarkedPapers && bookmarkedPapers.length > 0 ? (
+                  <div className="space-y-3">
+                    {bookmarkedPapers.slice(0, 3).map((paper: any) => (
+                      <Link
+                        key={paper.id}
+                        to="/papers"
+                        className="block p-3 rounded-lg bg-surface-1 hover:bg-surface-2 transition"
+                      >
+                        <div className="text-sm font-medium truncate">{paper.title}</div>
+                        <div className="text-xs text-muted-foreground mt-1">{paper.year}</div>
+                      </Link>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    No bookmarked papers yet.
+                  </p>
+                )}
+              </Card>
+            )}
+
+            {session && (
+              <Card>
+                <div className="flex items-center justify-between mb-3">
+                  <h3 className="font-semibold">Recent Activity</h3>
+                </div>
+                {recentActivity && recentActivity.length > 0 ? (
+                  <div className="space-y-3">
+                    {recentActivity.map((activity: any) => (
+                      <div key={activity.id} className="flex items-center gap-3 text-sm">
+                        <div className="size-8 rounded-full bg-primary/10 text-primary grid place-items-center shrink-0">
+                          {activity.activity_type === "complete" ? (
+                            <CheckCircle className="size-4" />
+                          ) : (
+                            <FileText className="size-4" />
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <div className="font-medium truncate">
+                            {activity.activity_type === "complete" ? "Completed" : "Viewed"} paper
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            {new Date(activity.created_at).toLocaleDateString()}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-sm text-muted-foreground">
+                    No recent activity yet.
+                  </p>
+                )}
+              </Card>
+            )}
 
             <Card>
               <h3 className="font-semibold mb-3">This week</h3>

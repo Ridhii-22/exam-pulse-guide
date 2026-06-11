@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { AdminShell } from "@/components/admin-shell";
 import { Button, Card } from "@/components/ui-bits";
 import { adminDeletePaper, adminListPapers, adminUpsertPaper, adminUploadPaperPDF } from "@/lib/api/admin.functions";
+import { useAuth } from "@/lib/auth";
 
 export const Route = createFileRoute("/secure-admin/papers")({
   head: () => ({ meta: [{ title: "Manage Papers — NeetForge" }] }),
@@ -22,7 +23,7 @@ const defaultPaper = {
 };
 
 const paperTypes = ["Full NEET PYQ", "Subject Wise", "Chapter Wise", "Mock Test"];
-const neetSubjects = ["Physics", "Chemistry", "Biology"];
+const neetSubjects = ["Physics", "Chemistry", "Biology", "Full Paper"];
 
 function AdminPapers() {
   const [search, setSearch] = useState("");
@@ -30,16 +31,27 @@ function AdminPapers() {
   const [formData, setFormData] = useState(defaultPaper);
   const [isUploading, setIsUploading] = useState(false);
   const queryClient = useQueryClient();
+  const { session } = useAuth();
 
   const { data, isLoading } = useQuery({
     queryKey: ["admin-papers", search],
-    queryFn: async () => await adminListPapers({ data: { search } }),
+    queryFn: async () => await adminListPapers({ data: { search, sessionToken: session?.access_token } }),
   });
 
   const uploadMutation = useMutation({
     mutationFn: async (file: File) => {
       setIsUploading(true);
-      return await adminUploadPaperPDF({ data: { filename: file.name, file } });
+      if (!session?.access_token) {
+        throw new Error("Not authenticated");
+      }
+      // Convert File to base64
+      const fileBase64 = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = (error) => reject(error);
+      });
+      return await adminUploadPaperPDF({ data: { filename: file.name, fileBase64, sessionToken: session.access_token } });
     },
     onSuccess: (data) => {
       setFormData((prev) => ({ ...prev, pdf_url: data.url }));
@@ -68,7 +80,7 @@ function AdminPapers() {
   });
 
   const deleteMutation = useMutation({
-    mutationFn: async (id: string) => await adminDeletePaper({ data: { id } }),
+    mutationFn: async (id: string) => await adminDeletePaper({ data: { id, sessionToken: session?.access_token } }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-papers"] });
       queryClient.invalidateQueries({ queryKey: ["public-papers"] });

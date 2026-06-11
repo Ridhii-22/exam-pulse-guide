@@ -14,6 +14,7 @@ import { Route as SignupRouteImport } from './routes/signup'
 import { Route as SecureAdminRouteImport } from './routes/secure-admin'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as PapersRouteImport } from './routes/papers'
+import { Route as PaperViewerRouteImport } from './routes/paper-viewer'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as LecturesRouteImport } from './routes/lectures'
 import { Route as DashboardManagementRouteImport } from './routes/dashboard-management'
@@ -52,6 +53,11 @@ const ProfileRoute = ProfileRouteImport.update({
 const PapersRoute = PapersRouteImport.update({
   id: '/papers',
   path: '/papers',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaperViewerRoute = PaperViewerRouteImport.update({
+  id: '/paper-viewer',
+  path: '/paper-viewer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -130,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/dashboard-management': typeof DashboardManagementRoute
   '/lectures': typeof LecturesRoute
   '/login': typeof LoginRoute
+  '/paper-viewer': typeof PaperViewerRoute
   '/papers': typeof PapersRoute
   '/profile': typeof ProfileRoute
   '/secure-admin': typeof SecureAdminRouteWithChildren
@@ -151,6 +158,7 @@ export interface FileRoutesByTo {
   '/dashboard-management': typeof DashboardManagementRoute
   '/lectures': typeof LecturesRoute
   '/login': typeof LoginRoute
+  '/paper-viewer': typeof PaperViewerRoute
   '/papers': typeof PapersRoute
   '/profile': typeof ProfileRoute
   '/signup': typeof SignupRoute
@@ -172,6 +180,7 @@ export interface FileRoutesById {
   '/dashboard-management': typeof DashboardManagementRoute
   '/lectures': typeof LecturesRoute
   '/login': typeof LoginRoute
+  '/paper-viewer': typeof PaperViewerRoute
   '/papers': typeof PapersRoute
   '/profile': typeof ProfileRoute
   '/secure-admin': typeof SecureAdminRouteWithChildren
@@ -195,6 +204,7 @@ export interface FileRouteTypes {
     | '/dashboard-management'
     | '/lectures'
     | '/login'
+    | '/paper-viewer'
     | '/papers'
     | '/profile'
     | '/secure-admin'
@@ -216,6 +226,7 @@ export interface FileRouteTypes {
     | '/dashboard-management'
     | '/lectures'
     | '/login'
+    | '/paper-viewer'
     | '/papers'
     | '/profile'
     | '/signup'
@@ -236,6 +247,7 @@ export interface FileRouteTypes {
     | '/dashboard-management'
     | '/lectures'
     | '/login'
+    | '/paper-viewer'
     | '/papers'
     | '/profile'
     | '/secure-admin'
@@ -258,6 +270,7 @@ export interface RootRouteChildren {
   DashboardManagementRoute: typeof DashboardManagementRoute
   LecturesRoute: typeof LecturesRoute
   LoginRoute: typeof LoginRoute
+  PaperViewerRoute: typeof PaperViewerRoute
   PapersRoute: typeof PapersRoute
   ProfileRoute: typeof ProfileRoute
   SecureAdminRoute: typeof SecureAdminRouteWithChildren
@@ -300,6 +313,13 @@ declare module '@tanstack/react-router' {
       path: '/papers'
       fullPath: '/papers'
       preLoaderRoute: typeof PapersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/paper-viewer': {
+      id: '/paper-viewer'
+      path: '/paper-viewer'
+      fullPath: '/paper-viewer'
+      preLoaderRoute: typeof PaperViewerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -446,6 +466,7 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardManagementRoute: DashboardManagementRoute,
   LecturesRoute: LecturesRoute,
   LoginRoute: LoginRoute,
+  PaperViewerRoute: PaperViewerRoute,
   PapersRoute: PapersRoute,
   ProfileRoute: ProfileRoute,
   SecureAdminRoute: SecureAdminRouteWithChildren,

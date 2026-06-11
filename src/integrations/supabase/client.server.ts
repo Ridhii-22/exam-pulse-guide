@@ -19,6 +19,9 @@ function createSupabaseAdminClient() {
     throw new Error(message);
   }
 
+  console.log("[Supabase Admin] URL:", SUPABASE_URL);
+  console.log("[Supabase Admin] Service role key (first 20 chars):", SUPABASE_SERVICE_ROLE_KEY.substring(0, 20) + "...");
+
   return createClient<Database>(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
     auth: {
       storage: undefined,

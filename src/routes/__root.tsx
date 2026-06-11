@@ -9,6 +9,8 @@ import {
 } from "@tanstack/react-router";
 import { ThemeProvider } from "@/lib/theme";
 import { AuthProvider } from "@/lib/auth";
+import { Toast } from "@/components/ui-bits";
+import { useToast } from "@/lib/toast";
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -125,11 +127,20 @@ function RootShell({ children }: { children: React.ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const { toasts, removeToast } = useToast();
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <AuthProvider>
           <Outlet />
+          {toasts.map((toast) => (
+            <Toast
+              key={toast.id}
+              message={toast.message}
+              type={toast.type}
+              onClose={() => removeToast(toast.id)}
+            />
+          ))}
         </AuthProvider>
       </ThemeProvider>
     </QueryClientProvider>

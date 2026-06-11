@@ -36,4 +36,4 @@ create index if not exists papers_chapter_idx on public.papers(chapter);
 -- Add comment to document the NEET-specific structure
 comment on column public.papers.paper_type is 'Type of NEET paper: Full NEET PYQ, Subject Wise, Chapter Wise, Mock Test';
 comment on column public.papers.chapter is 'Chapter name (required for Chapter Wise papers, optional otherwise)';
-comment on column public.papers.subject is 'NEET subject: Physics, Chemistry, Biology';
+comment on column public.papers.subject is 'NEET subject: Physics, Chemistry, Biology, Full Paper';

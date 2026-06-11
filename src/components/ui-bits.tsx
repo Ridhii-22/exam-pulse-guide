@@ -1,17 +1,20 @@
 import type { ReactNode } from "react";
+import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function Card({
   children,
   className,
   as = "div",
+  onClick,
 }: {
   children: ReactNode;
   className?: string;
   as?: React.ElementType;
+  onClick?: () => void;
 }) {
   const Tag = as;
-  return <Tag className={cn("card-soft p-5", className)}>{children}</Tag>;
+  return <Tag className={cn("card-soft p-5", className)} onClick={onClick}>{children}</Tag>;
 }
 
 export function Stat({
@@ -121,5 +124,36 @@ export function Button({
     >
       {children}
     </button>
+  );
+}
+
+export function Toast({
+  message,
+  type = "info",
+  onClose,
+}: {
+  message: string;
+  type?: "info" | "success" | "warning" | "error";
+  onClose: () => void;
+}) {
+  const bgColors = {
+    info: "bg-primary",
+    success: "bg-success",
+    warning: "bg-warning",
+    error: "bg-destructive",
+  };
+
+  return (
+    <div className="fixed bottom-4 right-4 z-50 animate-in slide-in-from-bottom-4">
+      <div className={cn("flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-white", bgColors[type])}>
+        <span className="text-sm">{message}</span>
+        <button
+          onClick={onClose}
+          className="shrink-0 opacity-70 hover:opacity-100 transition"
+        >
+          <X className="size-4" />
+        </button>
+      </div>
+    </div>
   );
 }

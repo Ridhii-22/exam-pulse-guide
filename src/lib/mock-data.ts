@@ -2,6 +2,7 @@ export const subjects = [
   { id: "physics", name: "Physics", color: "var(--color-info)", chapters: 29 },
   { id: "chemistry", name: "Chemistry", color: "var(--color-warning)", chapters: 30 },
   { id: "biology", name: "Biology", color: "var(--color-success)", chapters: 38 },
+  { id: "full-paper", name: "Full Paper", color: "var(--color-primary)", chapters: 0 },
 ];
 
 export const subjectProgress = [

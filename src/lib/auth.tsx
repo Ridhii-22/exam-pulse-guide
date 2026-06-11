@@ -13,7 +13,6 @@ type ProfileData = {
   target_year: number | null;
   xp: number;
   level: number;
-  role: Role;
   created_at: string;
   updated_at: string;
 };
@@ -45,29 +44,16 @@ const Ctx = createContext<AuthCtx | null>(null);
 async function fetchProfile(userId: string): Promise<ProfileData | null> {
   const { data } = await supabase
     .from("profiles")
-    .select("id, full_name, target_year, xp, level, role, created_at, updated_at")
+    .select("id, full_name, target_year, xp, level, created_at, updated_at")
     .eq("id", userId)
     .maybeSingle();
   return data as ProfileData | null;
 }
 
 async function ensureAdminProfile(userId: string) {
-  const { data: existing, error: fetchError } = await supabase
-    .from("profiles")
-    .select("id, role")
-    .eq("id", userId)
-    .maybeSingle();
-
-  if (fetchError || !existing) {
-    return;
-  }
-
-  if (existing.role !== "admin") {
-    const { error } = await supabase.from("profiles").update({ role: "admin" }).eq("id", userId);
-    if (error) {
-      console.warn("Temporary admin profile update failed:", error.message);
-    }
-  }
+  // The profiles table doesn't have a role column, so we skip this for now
+  // Admin role is determined by email in auth.tsx
+  return;
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -123,7 +109,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     session,
     loading,
     profile,
-    role: isTemporaryAdmin || profile?.role === "admin" ? "admin" : "student",
+    role: isTemporaryAdmin ? "admin" : "student",
     signIn: async (email, password) => {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (!error && data.session && email === TEMP_ADMIN_EMAIL && password === TEMP_ADMIN_PASSWORD) {

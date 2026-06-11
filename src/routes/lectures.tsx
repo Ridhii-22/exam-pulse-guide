@@ -7,6 +7,7 @@ import { PlayCircle, CheckCircle2, Clock, ChevronRight, Notebook } from "lucide-
 import { listPublicLectures } from "@/lib/api/content.functions";
 import { useLectureProgressMap } from "@/lib/use-user-data";
 import { cn } from "@/lib/utils";
+import { showToast } from "@/lib/toast";
 
 export const Route = createFileRoute("/lectures")({
   head: () => ({
@@ -83,7 +84,7 @@ function LecturesPage() {
                   </div>
                 </div>
               </div>
-              <Button>
+              <Button onClick={() => showToast("Coming Soon", "info")}>
                 Resume <ChevronRight className="size-4" />
               </Button>
             </div>
@@ -113,7 +114,12 @@ function LecturesPage() {
             const item = lecture as typeof lectureList[number];
             const progress = progressMap?.[item.id]?.progress_percent ?? 0;
             return (
-              <Card key={isPlaceholder ? `placeholder-${index}` : item.id} className="hover-lift">
+              <Card 
+                key={isPlaceholder ? `placeholder-${index}` : item.id} 
+                className="hover-lift"
+                as={!isPlaceholder ? "button" : "div"}
+                onClick={!isPlaceholder ? () => showToast("Coming Soon", "info") : undefined}
+              >
                 <div className="flex items-start gap-4">
                   <div className="size-16 rounded-xl bg-surface-2 grid place-items-center shrink-0 relative">
                     <PlayCircle className="size-6 text-primary" />
